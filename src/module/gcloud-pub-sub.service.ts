@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { PubSub } from '@google-cloud/pubsub'
 import { GoogleAuthOptions } from '../interfaces/gcloud-pub-sub.interface'
 import { PublishOptions } from '@google-cloud/pubsub/build/src/topic'
@@ -7,9 +7,11 @@ import { PublishOptions } from '@google-cloud/pubsub/build/src/topic'
 export class GcloudPubSubService {
 	gcloudPubSubLib: PubSub
 
+	/* istanbul ignore next */
 	constructor(
 		private readonly googleAuthOptions: GoogleAuthOptions,
-		private readonly publishOptions: PublishOptions
+		private readonly publishOptions: PublishOptions,
+		private readonly logger = new Logger(GcloudPubSubService.name)
 	) {
 		this.gcloudPubSubLib = new PubSub(googleAuthOptions)
 	}
@@ -20,6 +22,8 @@ export class GcloudPubSubService {
 		attributes: { [key: string]: string } = {}
 	): Promise<string> {
 		const dataBuffer = Buffer.from(data)
+		this.logger.debug(`PubSub message sent to topic: ${topic}`)
+		this.logger.debug(data)
 		return this.gcloudPubSubLib.topic(topic, this.publishOptions).publish(dataBuffer, attributes)
 	}
 }
