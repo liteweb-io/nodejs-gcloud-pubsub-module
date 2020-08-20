@@ -32,7 +32,7 @@
 		"test:dev": "jest --watch",
 		"build": "rm -rf ./dist && tsc && npm run build:index",
 		"build:index": "rm -rf ./index.js ./index.d.ts && tsc -d --skipLibCheck ./index.ts",
-		"format": "prettier **/**/*.ts --ignore-path ./.prettierignore --write && git status",
+		"format": "prettier **/**/*.ts --ignore-path ./.prettierignore --write",
 		"prepublish": "npm run format && npm run build",
 		"prepare": "npm run format && npm run build"
 	},
